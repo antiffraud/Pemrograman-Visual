@@ -85,8 +85,8 @@ class FormValidation(QWidget):
             QMessageBox.warning(self, "Validation Error", "All fields are required!")
             return
 
-        if not name.isalpha():
-            QMessageBox.warning(self, "Validation Error", "Name shouldn't contain a number")
+        if not re.match(r"^[A-Za-z\s]+$", name):
+            QMessageBox.warning(self, "Validation Error", "Name shouldn't contain number")
             return
 
         if "@" not in email or ".com" not in email:
