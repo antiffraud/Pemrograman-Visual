@@ -32,26 +32,9 @@ Trackerin adalah aplikasi desktop modern untuk manajemen aktivitas dan tugas har
 - **Responsive Layout**: Layout yang adaptif untuk berbagai ukuran layar
 - **Dark Theme Elements**: Elemen dengan nuansa profesional
 - **Dock Widgets**: Panel samping yang dapat dipindah dan disembunyikan
--------
-## 📋 Requirements
 
-### System Requirements
-- **OS**: Windows 10/11, macOS 10.14+, atau Linux Ubuntu 18.04+
-- **Python**: Python 3.8 atau lebih baru
-- **RAM**: Minimal 4GB RAM
-- **Storage**: 100MB ruang kosong
 
-### Python Dependencies
-```
-PyQt6>=6.0.0
-sqlite3 (built-in)
-csv (built-in)
-datetime (built-in)
-os (built-in)
-shutil (built-in)
-platform (built-in)
-```
--------
+---
 ## 🔧 Instalasi
 
 ### 1. Clone Repository
@@ -93,7 +76,7 @@ trackerin/
 ```bash
 python main.py
 ```
------
+---
 ## 📖 Cara Penggunaan
 
 ### Menjalankan Aplikasi
@@ -151,7 +134,469 @@ python main.py
 - **Ctrl+Q**: Keluar dari aplikasi
 - **F1**: Tampilkan informasi aplikasi
 
-------
+---
+## 📦 Import Dependencies & PyQt6 Components
+
+### Import Structure Overview
+
+Aplikasi Trackerin menggunakan berbagai modul Python dan PyQt6 components. Berikut penjelasan detail setiap import dan penggunaannya:
+
+#### **Standard Python Libraries**
+
+```python
+import sys                    # System-specific parameters dan functions
+import os                     # Operating system interface
+import csv                    # CSV file reading dan writing
+import sqlite3                # SQLite database operations
+import shutil                 # High-level file operations
+import platform               # Platform identification
+from datetime import datetime, timedelta  # Date dan time manipulation
+from typing import List, Dict, Optional   # Type hints untuk better code documentation
+```
+
+**Penggunaan dalam Aplikasi:**
+- **`sys`**: Digunakan di `main.py` untuk `sys.argv` dan `sys.exit()`
+- **`os`**: File path handling, asset checking, directory creation
+- **`csv`**: Export functionality di `export_page.py` dan `profile_page.py`
+- **`sqlite3`**: Database operations di `database.py`
+- **`shutil`**: Copy profile pictures di `profile_page.py`
+- **`platform`**: OS detection untuk font selection di `main.py`
+- **`datetime`**: Timestamp handling, date calculations di semua modules
+- **`typing`**: Type annotations untuk function parameters dan returns
+
+#### **PyQt6 Widget Components**
+
+### Core Application Components
+
+```python
+from PyQt6.QtWidgets import QApplication, QMainWindow
+```
+
+**QApplication:**
+- **File**: `main.py`
+- **Fungsi**: Entry point untuk semua GUI applications
+- **Kegunaan**: 
+  - Mengelola application-wide settings
+  - Event loop management
+  - System integration (clipboard, fonts)
+  - Window management dan lifecycle
+
+**QMainWindow:**
+- **File**: `main_window.py`
+- **Fungsi**: Main application window dengan built-in features
+- **Kegunaan**:
+  - Menu bar integration
+  - Status bar support
+  - Dock widget management
+  - Toolbar support
+  - Central widget container
+
+### Layout Management Components
+
+```python
+from PyQt6.QtWidgets import (
+    QVBoxLayout, QHBoxLayout, QStackedWidget
+)
+```
+
+**QVBoxLayout (Vertical Layout):**
+- **Files**: Semua UI files
+- **Fungsi**: Arrange widgets secara vertikal
+- **Kegunaan**:
+  - Form layouts (profile forms, task forms)
+  - Vertical stacking of components
+  - Main page layouts
+
+**QHBoxLayout (Horizontal Layout):**
+- **Files**: Semua UI files  
+- **Fungsi**: Arrange widgets secara horizontal
+- **Kegunaan**:
+  - Header navigation buttons
+  - Button groups (Done/Decline)
+  - Side-by-side components
+
+**QStackedWidget:**
+- **File**: `main_window.py`
+- **Fungsi**: Container untuk multiple pages dengan satu yang visible
+- **Kegunaan**:
+  - Page navigation (Schedule/Export/Profile)
+  - Memory efficient page management
+  - Smooth page transitions
+
+### Input Widgets
+
+```python
+from PyQt6.QtWidgets import (
+    QLineEdit, QDateEdit, QTimeEdit, QComboBox, 
+    QAbstractSpinBox, QCalendarWidget
+)
+```
+
+**QLineEdit:**
+- **Files**: `schedule_page.py`, `profile_page.py`
+- **Fungsi**: Single-line text input
+- **Kegunaan**:
+  - Activity input
+  - Search boxes
+  - Profile form fields (nama, email, student ID)
+  - Placeholder text dan validation
+
+**QDateEdit:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Date input dengan date picker
+- **Kegunaan**:
+  - Start date dan end date selection
+  - Built-in date validation
+  - Calendar popup integration
+
+**QTimeEdit:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Time input dengan time picker
+- **Kegunaan**:
+  - Start time dan end time selection
+  - AM/PM format support
+  - Built-in time validation
+
+**QComboBox:**
+- **File**: `profile_page.py`
+- **Fungsi**: Dropdown selection list
+- **Kegunaan**:
+  - Status type selection (Student/Teacher/Staff/Other)
+  - Dropdown styling dengan custom arrows
+  - Item selection events
+
+**QAbstractSpinBox:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Base class untuk spin boxes
+- **Kegunaan**:
+  - Button symbols configuration untuk QDateEdit/QTimeEdit
+  - PlusMinus button style
+
+**QCalendarWidget:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Interactive calendar widget
+- **Kegunaan**:
+  - Visual date selection
+  - Date navigation
+  - Custom styling untuk weekends
+  - Date click events
+
+### Display Widgets
+
+```python
+from PyQt6.QtWidgets import (
+    QLabel, QTableWidget, QTableWidgetItem, 
+    QScrollArea, QFrame, QGroupBox
+)
+```
+
+**QLabel:**
+- **Files**: Semua UI files
+- **Fungsi**: Text dan image display
+- **Kegunaan**:
+  - Titles dan headings
+  - User info display
+  - Profile picture display
+  - Status labels dengan color coding
+
+**QTableWidget:**
+- **Files**: `profile_page.py`, `export_page.py`
+- **Fungsi**: Spreadsheet-like table widget
+- **Kegunaan**:
+  - Activity history display
+  - Data preview untuk export
+  - Sortable columns
+  - Inline editing support
+  - Custom cell widgets (buttons)
+
+**QTableWidgetItem:**
+- **Files**: `profile_page.py`, `export_page.py`
+- **Fungsi**: Individual table cell
+- **Kegunaan**:
+  - Cell data storage
+  - Cell formatting (background colors)
+  - Sort data types
+  - Selection behavior
+
+**QScrollArea:**
+- **Files**: `schedule_page.py`, `export_page.py`
+- **Fungsi**: Scrollable container untuk widgets
+- **Kegunaan**:
+  - Day selector horizontal scroll
+  - Task cards vertical scroll
+  - Form scroll area
+  - Responsive content handling
+
+**QFrame:**
+- **Files**: `schedule_page.py`, `export_page.py`
+- **Fungsi**: Container dengan visual frame
+- **Kegunaan**:
+  - TaskCard base class
+  - Section separators
+  - Visual grouping
+  - Custom borders dan backgrounds
+
+**QGroupBox:**
+- **File**: `export_page.py`
+- **Fungsi**: Container dengan title border
+- **Kegunaan**:
+  - Data preview section
+  - Visual grouping dengan labels
+  - Collapsible sections
+
+### Interactive Widgets
+
+```python
+from PyQt6.QtWidgets import (
+    QPushButton, QMessageBox, QFileDialog,
+    QInputDialog, QDockWidget
+)
+```
+
+**QPushButton:**
+- **Files**: Semua UI files
+- **Fungsi**: Clickable button
+- **Kegunaan**:
+  - Navigation buttons (Schedule/Export/Profile)
+  - Action buttons (Submit, Done, Decline, Delete)
+  - Day selector buttons
+  - Custom styling dengan hover effects
+  - Icon support
+
+**QMessageBox:**
+- **Files**: Semua UI files
+- **Fungsi**: Modal dialog untuk messages
+- **Kegunaan**:
+  - Success notifications
+  - Error messages
+  - Confirmation dialogs
+  - Information displays
+  - Custom buttons dan icons
+
+**QFileDialog:**
+- **Files**: `profile_page.py`, `export_page.py`
+- **Fungsi**: File selection dialog
+- **Kegunaan**:
+  - Profile picture selection
+  - CSV export file save
+  - File type filters
+  - Directory browsing
+
+**QInputDialog:**
+- **File**: `profile_page.py`
+- **Fungsi**: Quick input dialogs
+- **Kegunaan**:
+  - Inline editing inputs
+  - Text input dialogs
+  - Item selection dialogs
+  - Filter option selection
+
+**QDockWidget:**
+- **File**: `main_window.py`
+- **Fungsi**: Dockable/floatable widget panel
+- **Kegunaan**:
+  - Profile management panel
+  - Resizable dock areas
+  - Floating window capability
+  - Hide/show functionality
+  - Dock area constraints
+
+### Layout Management Additional
+
+```python
+from PyQt6.QtWidgets import QHeaderView, QSizePolicy
+```
+
+**QHeaderView:**
+- **Files**: `profile_page.py`, `export_page.py`
+- **Fungsi**: Table header management
+- **Kegunaan**:
+  - Column width management
+  - Resize modes (ResizeToContents, Stretch, Fixed)
+  - Header visibility control
+  - Section styling
+
+**QSizePolicy:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Widget size behavior policies
+- **Kegunaan**:
+  - Widget expansion behavior
+  - Minimum/maximum size constraints
+  - Responsive layout behavior
+
+#### **PyQt6 Core Components**
+
+```python
+from PyQt6.QtCore import Qt, QDate, QTime, QTimer, pyqtSignal
+```
+
+**Qt (Namespace):**
+- **Files**: Semua UI files
+- **Fungsi**: Constants dan enums
+- **Kegunaan**:
+  - Alignment flags (AlignCenter, AlignLeft, dll)
+  - Scroll bar policies
+  - Selection behaviors
+  - Dock widget areas
+  - Key modifiers
+
+**QDate:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Date handling tanpa time
+- **Kegunaan**:
+  - Current date tracking
+  - Date arithmetic (addDays)
+  - Date formatting (toString)
+  - Date comparison
+
+**QTime:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Time handling tanpa date
+- **Kegunaan**:
+  - Current time display
+  - Time arithmetic (addSecs)
+  - Time formatting
+  - Time validation
+
+**QTimer:**
+- **File**: `main_window.py`
+- **Fungsi**: Periodic events dan delays
+- **Kegunaan**:
+  - Auto-refresh status bar setiap menit
+  - Timeout signals
+  - Single-shot timers
+  - Event scheduling
+
+**pyqtSignal:**
+- **Files**: `schedule_page.py`, `profile_page.py`
+- **Fungsi**: Custom signal definition
+- **Kegunaan**:
+  - Inter-component communication
+  - task_updated signal di TaskCard
+  - profile_updated signal di ProfilePage
+  - Event-driven architecture
+
+#### **PyQt6 GUI Components**
+
+```python
+from PyQt6.QtGui import (
+    QAction, QPixmap, QIcon, QFont, QColor, 
+    QTextCharFormat, QPainter, QPen, QBrush
+)
+```
+
+**QAction:**
+- **File**: `main_window.py`
+- **Fungsi**: Menu dan toolbar actions
+- **Kegunaan**:
+  - Menu items dengan shortcuts
+  - Keyboard shortcuts (Ctrl+N, Ctrl+E, dll)
+  - Action triggers
+  - Icon dan text properties
+
+**QPixmap:**
+- **Files**: `main_window.py`, `profile_page.py`
+- **Fungsi**: Image handling dan display
+- **Kegunaan**:
+  - Logo loading
+  - Profile picture processing
+  - Image scaling dan transformation
+  - Icon creation
+
+**QIcon:**
+- **File**: `main_window.py`
+- **Fungsi**: Icon management
+- **Kegunaan**:
+  - Window icon
+  - Navigation button icons
+  - Custom icon loading
+  - Icon state management (default/clicked)
+
+**QFont:**
+- **Files**: `main.py`, `export_page.py`
+- **Fungsi**: Font configuration
+- **Kegunaan**:
+  - Platform-specific font selection
+  - Font fallback system
+  - Table cell font sizing
+  - Custom typography
+
+**QColor:**
+- **File**: `profile_page.py`
+- **Fungsi**: Color management
+- **Kegunaan**:
+  - Status background colors
+  - Cell background coloring
+  - Color coding untuk status
+  - Custom color schemes
+
+**QTextCharFormat:**
+- **File**: `schedule_page.py`
+- **Fungsi**: Text formatting untuk rich text
+- **Kegunaan**:
+  - Calendar text formatting
+  - Weekend highlighting (red Sundays)
+  - Text color customization
+
+**QPainter, QPen, QBrush:**
+- **Files**: `main_window.py`, `profile_page.py`
+- **Fungsi**: Custom drawing operations
+- **Kegunaan**:
+  - Circular image cropping
+  - Profile picture circular masking
+  - Custom widget painting
+  - Advanced graphics operations
+
+### Component Usage Matrix
+
+| Component | main.py | main_window.py | schedule_page.py | profile_page.py | export_page.py |
+|-----------|---------|----------------|------------------|-----------------|----------------|
+| QApplication | ✅ Primary | ❌ | ❌ | ❌ | ❌ |
+| QMainWindow | ❌ | ✅ Primary | ❌ | ❌ | ❌ |
+| QDockWidget | ❌ | ✅ Setup | ❌ | ✅ Content | ❌ |
+| QStackedWidget | ❌ | ✅ Navigation | ❌ | ❌ | ❌ |
+| QCalendarWidget | ❌ | ❌ | ✅ Primary | ❌ | ❌ |
+| QTableWidget | ❌ | ❌ | ❌ | ✅ Primary | ✅ Primary |
+| QScrollArea | ❌ | ❌ | ✅ Multiple | ❌ | ❌ |
+| pyqtSignal | ❌ | ❌ | ✅ TaskCard | ✅ Profile | ❌ |
+| QTimer | ❌ | ✅ Status | ❌ | ❌ | ❌ |
+
+### Integration Patterns
+
+**1. Signal-Slot Communication:**
+```python
+# TaskCard emits signal ketika task updated
+self.task_updated.emit()  # schedule_page.py
+
+# ProfilePage emits signal ketika profile changed  
+self.profile_updated.emit()  # profile_page.py
+
+# MainWindow listens dan responds
+self.profile_page.profile_updated.connect(self.refresh_header_profile)
+```
+
+**2. Database Integration:**
+```python
+# Setiap page component menerima DatabaseHandler instance
+self.schedule_page = SchedulePage(self.db)  # main_window.py
+self.export_page = ExportPage(self.db)      # main_window.py
+self.profile_page = ProfilePage(self.db)    # main_window.py
+```
+
+**3. Styling Integration:**
+```python
+# Centralized styling dari styles.py
+from styles import Styles, COLORS
+widget.setStyleSheet(Styles.COMPONENT_STYLE)
+```
+
+**Sistem import ini memungkinkan aplikasi untuk:**
+- **Modular Architecture**: Setiap component independen
+- **Reusable Components**: Shared functionality across pages
+- **Type Safety**: Type hints untuk better development experience
+- **Cross-Platform Compatibility**: Platform-specific handling
+- **Rich GUI Features**: Advanced PyQt6 capabilities
+
 ## 🏗️ Arsitektur Aplikasi
 
 ### Struktur File dan Modul
@@ -159,6 +604,7 @@ python main.py
 #### `main.py` - Entry Point Aplikasi
 Entry point aplikasi yang mengatur inisialisasi dan konfigurasi awal.
 
+---
 **Fungsi Utama:**
 ```python
 def main():
@@ -185,6 +631,7 @@ def main():
 #### `database.py` - DatabaseHandler Class
 Class utama untuk manajemen database SQLite dengan operasi CRUD lengkap.
 
+---
 **Constructor:**
 ```python
 def __init__(self, db_path: str = "trackerin.db"):
@@ -331,6 +778,7 @@ def get_task_statistics(self) -> Dict:
 #### `main_window.py` - MainWindow Class
 Window utama aplikasi yang mengatur layout, navigasi, dan integrasi semua komponen.
 
+---
 **Constructor & Initialization:**
 ```python
 def __init__(self):
@@ -501,6 +949,7 @@ def safe_get_user_profile(self):
 #### `schedule_page.py` - SchedulePage Class
 Halaman utama untuk manajemen jadwal dan tugas harian.
 
+---
 **TaskCard Component:**
 ```python
 class TaskCard(QFrame):
@@ -655,6 +1104,7 @@ def paste_to_active_input(self, text: str):
 #### `profile_page.py` - ProfilePage Class
 Halaman untuk manajemen profile dan viewing activity history.
 
+---
 **Constructor & Signals:**
 ```python
 class ProfilePage(QWidget):
@@ -838,6 +1288,7 @@ def paste_to_active_input(self, text: str):
 #### `export_page.py` - ExportPage Class
 Halaman untuk preview dan export data ke format CSV.
 
+---
 **Constructor & Layout:**
 ```python
 def __init__(self, db: DatabaseHandler):
@@ -930,6 +1381,8 @@ def refresh_data(self):
 #### `styles.py` - Styling System
 File konfigurasi styling terpusat untuk konsistensi visual di seluruh aplikasi.
 
+---
+
 **Color Palette:**
 ```python
 COLORS = {
@@ -1019,7 +1472,7 @@ def get_complete_stylesheet() -> str:
 - **Modern Look**: Flat design dengan subtle shadows dan borders
 - **Accessibility**: Contrast ratio yang baik untuk readability
 - **Professional**: Blue-based theme untuk corporate look
-----
+
 ## 🎯 Contoh Penggunaan Advanced
 
 ### Custom Icons Setup
@@ -1059,43 +1512,6 @@ CUSTOM_TASK_CARD = """
 """
 ```
 
-----
-## 🔧 Troubleshooting
-
-### Error Database
-```python
-# Jika database corrupt, reset dengan:
-import os
-if os.path.exists("trackerin.db"):
-    os.remove("trackerin.db")
-# Restart aplikasi untuk recreate database
-```
-
-### Icon Loading Issues
-1. Pastikan file icon ada di `assets/icons/`
-2. Check format file (PNG recommended)
-3. Verify naming convention yang benar
-4. Restart aplikasi setelah menambah icons
-
-### PyQt6 Installation Issues
-```bash
-# Untuk Ubuntu/Debian
-sudo apt-get install python3-pyqt6
-
-brew install pyqt6
-
-conda install pyqt6
-```
-
-### Memory Issues
-- Aplikasi menggunakan SQLite yang lightweight
-- Jika banyak data, consider database cleanup:
-```python
-db.execute("DELETE FROM tasks WHERE status='Finished' AND created_at < ?", 
-           (datetime.now() - timedelta(days=30),))
-```
-
------
 ## 📝 Changelog
 
 ### Version 1.1 (Current)
@@ -1114,3 +1530,4 @@ db.execute("DELETE FROM tasks WHERE status='Finished' AND created_at < ?",
 - 🔄 **v1.5**: Data synchronization dengan cloud
 - 🔄 **v1.6**: Mobile companion app
 - 🔄 **v1.7**: Team collaboration features
+
