@@ -597,6 +597,7 @@ widget.setStyleSheet(Styles.COMPONENT_STYLE)
 - **Cross-Platform Compatibility**: Platform-specific handling
 - **Rich GUI Features**: Advanced PyQt6 capabilities
 
+---
 ## 🏗️ Arsitektur Aplikasi
 
 ### Struktur File dan Modul
